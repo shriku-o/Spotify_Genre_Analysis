@@ -62,5 +62,5 @@ By grouping the dataset by genre and looking at aggregate statistics, we can pin
 | blues         |          0.571 |    0.6   |     0.611 |          0.392 |
 | brazil        |          0.564 |    0.626 |     0.466 |          0.329 |
 
-* **Significance:** This aggregate table highlights the structural differences between genres. By evaluating the mean values of features like tempo, energy, and danceability side-by-side, we can mathematically track how the algorithm categorizes sonic profiles to distinguish a high-tempo electronic track from a low-energy acoustic track.
+This aggregate table highlights the structural differences between genres. By evaluating the mean values of features like tempo, energy, and danceability side-by-side, we can mathematically track how the algorithm categorizes sonic profiles to distinguish a high-tempo electronic track from a low-energy acoustic track.
 
