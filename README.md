@@ -31,6 +31,7 @@ The danceability distribution shows a slightly left-skewed bell curve centered r
 
 <iframe src="assets/energy_distribution.html" width="800" height="600" frameborder="0"></iframe>
 
+
 The energy distribution shows a distinct left-skew, revealing that streaming platforms host a high concentration of high-energy tracks. There is a notable spike approaching the 0.8 to 0.9 range, showing that high-intensity music heavily populates modern genres.
 
 
@@ -39,11 +40,12 @@ To explore how these individual features interact with one another, we analyzed 
 
 <iframe src="assets/danceability_vs_energy.html" width="800" height="600" frameborder="0"></iframe>
 
+
 This scatter plot maps the relationship between danceability and energy across tracks. While there is a dense cluster of tracks possessing both high energy and high danceability, the overall distribution suggests a moderate positive association, indicating that highly energetic tracks frequently—but not always—lend themselves well to dancing.
 
 <iframe src="assets/valence_by_genre.html" width="800" height="600" frameborder="0"></iframe>
 
-* **Interpretation:** This visualization explores how music "valence" (the emotional positivity of a track) varies contextually across different musical genres. The variance in distributions highlights clear shifts in emotional tone, showing that track features act as measurable boundaries separating one genre from another.
+This visualization explores how music "valence" (the emotional positivity of a track) varies contextually across different musical genres. The variance in distributions highlights clear shifts in emotional tone, showing that track features act as measurable boundaries separating one genre from another.
 
 
 ## Interesting Aggregates
