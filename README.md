@@ -22,12 +22,6 @@ Lastly, the new column I added to the dataset was 'duration_min', which converts
 
 After cleaning, the dataset still retained 100,000 unique songs across many different genres, making the analysis valid and well-suited for exploring the differences between genres.
 
-### Cleaned Dataset (First 5 Rows)
-Below is a preview of the cleaned dataset used for this analysis:
-
-[PASTE YOUR CLEANED DF HEAD .to_markdown() HERE]
-
-
 ## Univariate Analysis
 To understand the individual behavior of our primary audio metrics, we examined the isolated distributions of specific song characteristics across the dataset.
 
