@@ -15,4 +15,13 @@ This is an important question because music genres are often subjective, with te
 
 # Data Cleaning and Exploratory Data Analysis
 
+Before beginning our analysis, we have to first ensure that the data is accurate and meaningful via cleaning. We start by removing the Index column ('Unnamed: 0') because it doesn't contain anything significant. I then checked for missing values across the columns and checked if they needed to be adjusted.
+
+A column that stood out was the 'tempo' column, as the missing value within this column would be an important audio feature when comparing genres. Another column that I had to adjust was the 'track_id' column so that each song could only appear once in the dataset. Preventing repeated tracks would ensure that it would be disproportionately influence the genre statistic. 
+
+Lastly, the new column I added to the data set was 'duration_min' which converts the song duration from milliseconds into minutes, making analysis easier and practical. 
+
+After cleaning the dataset, the dataset still retained 100,000 unique songs across many different genres. Making the analysis still valid and well-suited for exploring the differences between genres. 
+
+
 
