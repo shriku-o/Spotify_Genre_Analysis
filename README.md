@@ -13,4 +13,6 @@ Music streaming platforms collect a plethora of data beyond titles and artist na
 This is an important question because music genres are often subjective, with terms like “energetic” or “calm” being difficult to measure directly. By analyzing measurable audio features, we can determine whether genres truly differ in quantifiable ways and identify which characteristics are most useful for distinguishing them. This type of analysis is valuable for companies like Spotify and other music streaming platforms, as understanding music trends and listener preferences can help improve recommendation systems and create a more personalized user experience.
 
 
+# Data Cleaning and Exploratory Data Analysis
+
 
