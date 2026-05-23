@@ -25,6 +25,8 @@ After cleaning the dataset, the dataset still retained 100,000 unique songs acro
 
 
 
+
+
 <iframe
   src="assets/danceability_distribution.html"
   width="800"
@@ -42,3 +44,10 @@ After cleaning the dataset, the dataset still retained 100,000 unique songs acro
   width="800"
   height="600"
   frameborder="0"></iframe>
+
+
+<iframe src="assets/danceability_distribution.html" width="800" height="600" frameborder="0"></iframe>
+
+<iframe src="assets/energy_distribution.html" width="800" height="600" frameborder="0"></iframe>
+
+<iframe src="assets/plotly_diagnostic_output.html" width="800" height="600" frameborder="0"></iframe>
