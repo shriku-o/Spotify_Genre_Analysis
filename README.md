@@ -22,41 +22,40 @@ Lastly, the new column I added to the dataset was 'duration_min', which converts
 
 After cleaning, the dataset still retained 100,000 unique songs across many different genres, making the analysis valid and well-suited for exploring the differences between genres.
 
----
+### Cleaned Dataset (First 5 Rows)
+Below is a preview of the cleaned dataset used for this analysis:
 
-# 📊 Univariate Analysis (Interactive Visualizations)
+[PASTE YOUR CLEANED DF HEAD .to_markdown() HERE]
 
-To explore the distribution of key audio features, interactive Plotly histograms were created. These allow zooming, hovering, and deeper inspection of the data.
+
+## Univariate Analysis
+To understand the individual behavior of our primary audio metrics, we examined the isolated distributions of specific song characteristics across the dataset.
 
 <iframe src="assets/danceability_distribution.html" width="800" height="600" frameborder="0"></iframe>
 
+* **Interpretation:** The danceability distribution shows a slightly left-skewed bell curve centered roughly around 0.6. This indicates that a majority of the tracks in the dataset maintain a moderate-to-high danceability rating, with very few tracks falling below 0.2.
+
 <iframe src="assets/energy_distribution.html" width="800" height="600" frameborder="0"></iframe>
 
----
+* **Interpretation:** The energy distribution shows a distinct left-skew, revealing that streaming platforms host a high concentration of high-energy tracks. There is a notable spike approaching the 0.8 to 0.9 range, showing that high-intensity music heavily populates modern genres.
 
-# 🎨 Bivariate Analysis
 
-To better understand relationships between audio features and genres, bivariate visualizations were created.
-
-## 🎵 Danceability vs Energy Across Genres
-
-This scatter plot shows how songs cluster based on danceability and energy, with coloring by genre.
+## Bivariate Analysis
+To explore how these individual features interact with one another, we analyzed pairs of columns to look for underlying associations and patterns.
 
 <iframe src="assets/danceability_vs_energy.html" width="800" height="600" frameborder="0"></iframe>
 
----
-
-## 🎭 Valence Distribution Across Selected Genres
-
-This boxplot compares the emotional tone (valence) across pop, rock, jazz, and classical music.
+* **Interpretation:** This scatter plot maps the relationship between danceability and energy across tracks. While there is a dense cluster of tracks possessing both high energy and high danceability, the overall distribution suggests a moderate positive association, indicating that highly energetic tracks frequently—but not always—lend themselves well to dancing.
 
 <iframe src="assets/valence_by_genre.html" width="800" height="600" frameborder="0"></iframe>
 
----
+* **Interpretation:** This visualization explores how music "valence" (the emotional positivity of a track) varies contextually across different musical genres. The variance in distributions highlights clear shifts in emotional tone, showing that track features act as measurable boundaries separating one genre from another.
 
-# ⚠️ Notes on Viewing
 
-If the visualizations do not render directly in GitHub:
+## Interesting Aggregates
+By grouping the dataset by genre and looking at aggregate statistics, we can pinpoint exactly which features act as the strongest differentiators between musical styles.
 
-- Open the `.html` files in the repository
-- Or download and open them in your browser
+[PASTE YOUR GROUPED/PIVOT TABLE .to_markdown() HERE]
+
+* **Significance:** This aggregate table highlights the structural differences between genres. By evaluating the mean values of features like tempo, energy, and danceability side-by-side, we can mathematically track how the algorithm categorizes sonic profiles to distinguish a high-tempo electronic track from a low-energy acoustic track.
+
