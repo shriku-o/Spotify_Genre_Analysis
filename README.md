@@ -55,7 +55,18 @@ To explore how these individual features interact with one another, we analyzed 
 ## Interesting Aggregates
 By grouping the dataset by genre and looking at aggregate statistics, we can pinpoint exactly which features act as the strongest differentiators between musical styles.
 
-[PASTE YOUR GROUPED/PIVOT TABLE .to_markdown() HERE]
+| track_genre   |   danceability |   energy |   valence |   acousticness |
+|:--------------|---------------:|---------:|----------:|---------------:|
+| acoustic      |          0.551 |    0.465 |     0.44  |          0.536 |
+| afrobeat      |          0.669 |    0.716 |     0.702 |          0.258 |
+| alt-rock      |          0.53  |    0.763 |     0.514 |          0.12  |
+| alternative   |          0.583 |    0.712 |     0.496 |          0.157 |
+| ambient       |          0.373 |    0.267 |     0.174 |          0.742 |
+| anime         |          0.539 |    0.712 |     0.452 |          0.237 |
+| black-metal   |          0.297 |    0.888 |     0.192 |          0.021 |
+| bluegrass     |          0.533 |    0.559 |     0.648 |          0.529 |
+| blues         |          0.571 |    0.6   |     0.611 |          0.392 |
+| brazil        |          0.564 |    0.626 |     0.466 |          0.329 |
 
 * **Significance:** This aggregate table highlights the structural differences between genres. By evaluating the mean values of features like tempo, energy, and danceability side-by-side, we can mathematically track how the algorithm categorizes sonic profiles to distinguish a high-tempo electronic track from a low-energy acoustic track.
 
