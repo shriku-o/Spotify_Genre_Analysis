@@ -25,3 +25,23 @@ After cleaning the dataset, the dataset still retained 100,000 unique songs acro
 
 
 
+---
+
+# 📊 Interactive Visualizations
+
+To explore the distribution of key audio features, interactive Plotly histograms were created. These allow zooming, hovering, and deeper inspection of the data.
+
+You can view them here:
+
+- 🎵 [Distribution of Song Energy](./energy_distribution.html)
+- 💃 [Distribution of Danceability](./danceability_distribution.html)
+
+> If the plots don’t open directly in GitHub, click the file in the repository and select **“View raw”**, or download and open in your browser.
+
+---
+
+
+
+
+
+
