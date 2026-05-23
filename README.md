@@ -33,11 +33,11 @@ To understand the individual behavior of our primary audio metrics, we examined 
 
 <iframe src="assets/danceability_distribution.html" width="800" height="600" frameborder="0"></iframe>
 
-* **Interpretation:** The danceability distribution shows a slightly left-skewed bell curve centered roughly around 0.6. This indicates that a majority of the tracks in the dataset maintain a moderate-to-high danceability rating, with very few tracks falling below 0.2.
+The danceability distribution shows a slightly left-skewed bell curve centered roughly around 0.6. This indicates that a majority of the tracks in the dataset maintain a moderate-to-high danceability rating, with very few tracks falling below 0.2.
 
 <iframe src="assets/energy_distribution.html" width="800" height="600" frameborder="0"></iframe>
 
-* **Interpretation:** The energy distribution shows a distinct left-skew, revealing that streaming platforms host a high concentration of high-energy tracks. There is a notable spike approaching the 0.8 to 0.9 range, showing that high-intensity music heavily populates modern genres.
+The energy distribution shows a distinct left-skew, revealing that streaming platforms host a high concentration of high-energy tracks. There is a notable spike approaching the 0.8 to 0.9 range, showing that high-intensity music heavily populates modern genres.
 
 
 ## Bivariate Analysis
@@ -45,7 +45,7 @@ To explore how these individual features interact with one another, we analyzed 
 
 <iframe src="assets/danceability_vs_energy.html" width="800" height="600" frameborder="0"></iframe>
 
-* **Interpretation:** This scatter plot maps the relationship between danceability and energy across tracks. While there is a dense cluster of tracks possessing both high energy and high danceability, the overall distribution suggests a moderate positive association, indicating that highly energetic tracks frequently—but not always—lend themselves well to dancing.
+This scatter plot maps the relationship between danceability and energy across tracks. While there is a dense cluster of tracks possessing both high energy and high danceability, the overall distribution suggests a moderate positive association, indicating that highly energetic tracks frequently—but not always—lend themselves well to dancing.
 
 <iframe src="assets/valence_by_genre.html" width="800" height="600" frameborder="0"></iframe>
 
