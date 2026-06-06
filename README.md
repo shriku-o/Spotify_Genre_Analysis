@@ -25,11 +25,11 @@ After cleaning, the dataset still retained 100,000 unique songs across many diff
 ## Univariate Analysis
 To understand the individual behavior of our primary audio metrics, we examined the isolated distributions of specific song characteristics across the dataset.
 
-<iframe src="assets/danceability_distribution.html" width="800" height="600" frameborder="0"></iframe>
+<iframe src="assets/danceability_distribution.html" width="700" height="600" frameborder="0"></iframe>
 
 The danceability distribution shows a slightly left-skewed bell curve centered roughly around 0.6. This indicates that a majority of the tracks in the dataset maintain a moderate-to-high danceability rating, with very few tracks falling below 0.2.
 
-<iframe src="assets/energy_distribution.html" width="800" height="600" frameborder="0"></iframe>
+<iframe src="assets/energy_distribution.html" width="700" height="600" frameborder="0"></iframe>
 
 
 The energy distribution shows a distinct left-skew, revealing that streaming platforms host a high concentration of high-energy tracks. There is a notable spike approaching the 0.8 to 0.9 range, showing that high-intensity music heavily populates modern genres.
@@ -38,12 +38,12 @@ The energy distribution shows a distinct left-skew, revealing that streaming pla
 ## Bivariate Analysis
 To explore how these individual features interact with one another, we analyzed pairs of columns to look for underlying associations and patterns.
 
-<iframe src="assets/danceability_vs_energy.html" width="800" height="600" frameborder="0"></iframe>
+<iframe src="assets/danceability_vs_energy.html" width="700" height="600" frameborder="0"></iframe>
 
 
 This scatter plot maps the relationship between danceability and energy across tracks. While there is a dense cluster of tracks possessing both high energy and high danceability, the overall distribution suggests a moderate positive association, indicating that highly energetic tracks frequently—but not always—lend themselves well to dancing.
 
-<iframe src="assets/valence_by_genre.html" width="800" height="600" frameborder="0"></iframe>
+<iframe src="assets/valence_by_genre.html" width="700" height="600" frameborder="0"></iframe>
 
 This visualization explores how music "valence" (the emotional positivity of a track) varies contextually across different musical genres. The variance in distributions highlights clear shifts in emotional tone, showing that track features act as measurable boundaries separating one genre from another.
 
@@ -93,7 +93,7 @@ To rigorously evaluate what factors influence whether a song's release date is m
 Running this permutation test yielded an empirical p-value of 0.0. Out of all 1,000 shuffled trials, not a single permuted difference came close to our extreme observed difference. Therefore, we reject the null hypothesis at the 5% significance level. We conclude that the missingness of release_date depends on popularity. This confirms that the missingness of this column is MAR conditional on popularity, as less mainstream or obscure tracks are systematically less likely to have complete metadata.
 
 
-<iframe src="missingness_popularity.html" width="800" height="600" frameborder="0"></iframe> 
+<iframe src="missingness_popularity.html" width="700" height="600" frameborder="0"></iframe> 
 
 
 ## Permutation Test 2: Release Date Missingness vs. Tempo 
@@ -105,7 +105,7 @@ Running this permutation test yielded an empirical p-value of 0.0. Out of all 1,
 ## Result and Interpretation:
 Intuitively, a song's musical speed (Beats Per Minute) should have no structural impact on whether an administrative metadata field is filled out. The permutation test confirmed this intuition, yielding a high p-value (significantly greater than 0.05). Consequently, we fail to reject the null hypothesis. We conclude that the missingness of release_date does not depend on tempo.
 
-<iframe src="permutation_dist_popularity.html" width="800" height="600" frameborder="0"></iframe>
+<iframe src="permutation_dist_popularity.html" width="700" height="600" frameborder="0"></iframe>
 
 
 ---
@@ -124,7 +124,7 @@ To evaluate whether genres are truly separated by quantifiable audio characteris
 # Results and Test Interpretation:
 After running 1,000 permutations where genre labels were randomly shuffled across tracks, we observed the following outcomes:
 - Observed Difference:
-<iframe src="hypothesis_test_energy.html" width="800" height="600" frameborder="0"></iframe>
+<iframe src="hypothesis_test_energy.html" width="700" height="600" frameborder="0"></iframe>
 - Resulting p-value: 0.0
 
 Because our calculated p-value is less than our significance level of 0.05, we reject the null hypothesis.
@@ -246,7 +246,7 @@ By adding our new acoustic parameters, the Final Model performs beautifully:
 
 The success of this final model highlights that while a basic model can learn simple signals like volume, multidimensional tasks like genre classification require a diverse, cleanly engineered acoustic feature space.
 
-<iframe src="final_model_confusion_matrix.html" width="800" height="600" frameborder="0"></iframe>
+<iframe src="final_model_confusion_matrix.html" width="700" height="600" frameborder="0"></iframe>
 
 
 ---
@@ -280,6 +280,6 @@ From the perspective of our data-generating process, this outcome aligns with mu
 
 While these results indicate an acceptable level of predictive parity between explicit and clean tracks, we cannot state with absolute certainty that the model is perfectly fair under all conditions. Because this analysis is constrained to our specific validation slice of Spotify data, these findings simply mean we cannot prove a systematic, unfair performance bias across these groups given our current evidence.
 
-<iframe src="fairness_analysis_distribution.html" width="800" height="600" frameborder="0"></iframe>
+<iframe src="fairness_analysis_distribution.html" width="700" height="600" frameborder="0"></iframe>
 
 
