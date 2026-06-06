@@ -66,3 +66,44 @@ By grouping the dataset by genre and looking at aggregate statistics, we can pin
 
 This aggregate table highlights the structural differences between genres. By evaluating the mean values of features like tempo, energy, and danceability side-by-side, we can mathematically track how the algorithm categorizes sonic profiles to distinguish a high-tempo electronic track from a low-energy acoustic track.
 
+---
+
+# Assessment of Missingness
+
+
+## NMAR Analysis
+
+I believe that the release_date column contains a strong NMAR (Not Missing At Random) component. While our subsequent permutation tests show that its missingness correlates with observed features like popularity, the underlying data-generating process suggests that the missingness ultimately relies on unobserved values or the missing values themselves.
+
+For instance, many missing release dates occur in underground tracks, independent mixtapes, or archival recordings where the precise release date was never formally logged by the creator or has been lost to time. Because the date is missing precisely because the historical date itself is unknown or unrecorded, it fits the definition of NMAR.
+
+To shift this mechanism from NMAR to MAR (Missing At Random), we would want to obtain additional data regarding the distribution chain. Specifically, adding columns for Distribution Type (e.g., major record label vs. independent self-release via aggregators like DistroKid) or Catalog Registration Status would help explain why the metadata is absent, effectively making the missingness explainable by observed variables.
+
+## Missing Dependency
+
+To rigorously evaluate what factors influence whether a song's release date is missing, we performed two permutation tests tracking the relationship between the missingness indicator (release_date_missing) and other track characteristics.
+
+## Permutation Test 1: Release Date Missingness vs. Popularity 
+- Null Hypothesis ($H_0$): The distribution of popularity is the same regardless of whether release_date is missing or present.
+- Alternative Hypothesis ($H_1$): The distribution of popularity is different when release_date is missing compared to when it is present.
+- Test Statistic: The difference in mean popularity between the two groups (Missing Mean - Not Missing Mean).
+- Significance Level: $\alpha = 0.05$
+  
+## Result and Interpretation:
+Running this permutation test yielded an empirical p-value of 0.0. Out of all 1,000 shuffled trials, not a single permuted difference came close to our extreme observed difference. Therefore, we reject the null hypothesis at the 5% significance level. We conclude that the missingness of release_date depends on popularity. This confirms that the missingness of this column is MAR conditional on popularity, as less mainstream or obscure tracks are systematically less likely to have complete metadata.
+
+
+<iframe src="missingness_popularity.html" width="800" height="600" frameborder="0"></iframe> 
+^^ CHANGE TO CORRECT GRAPH
+
+
+## Permutation Test 2: Release Date Missingness vs. Tempo 
+- Null Hypothesis ($H_0$): The distribution of tempo is the same regardless of whether release_date is missing or present.Alternative
+- Hypothesis ($H_1$): The distribution of tempo is different when release_date is missing compared to when it is present.
+- Test Statistic: The difference in mean tempo between the two groups.
+- Significance Level: $\alpha = 0.05$
+  
+## Result and Interpretation:
+Intuitively, a song's musical speed (Beats Per Minute) should have no structural impact on whether an administrative metadata field is filled out. The permutation test confirmed this intuition, yielding a high p-value (significantly greater than 0.05). Consequently, we fail to reject the null hypothesis. We conclude that the missingness of release_date does not depend on tempo.
+
+<iframe src="permutation_dist_popularity.html" width="800" height="600" frameborder="0"></iframe>
