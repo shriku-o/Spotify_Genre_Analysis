@@ -6,7 +6,7 @@ Music streaming platforms collect a plethora of data beyond titles and artist na
 
 **In this project, I will be exploring how songs from different genres vary in their audio features and how these characteristics compare across genres. My central question is:**
 
-## Within the chosen genres, which audio features best separate one genre from another?
+#### Within the chosen genres, which audio features best separate one genre from another?
 
 This is an important question because music genres are often subjective, with terms like “energetic” or “calm” being difficult to measure directly. By analyzing measurable audio features, we can determine whether genres truly differ in quantifiable ways and identify which characteristics are most useful for distinguishing them. This type of analysis is valuable for companies like Spotify and other music streaming platforms, as understanding music trends and listener preferences can help improve recommendation systems and create a more personalized user experience.
 
@@ -22,7 +22,7 @@ Lastly, the new column I added to the dataset was 'duration_min', which converts
 
 After cleaning, the dataset still retained 100,000 unique songs across many different genres, making the analysis valid and well-suited for exploring the differences between genres.
 
-## Univariate Analysis
+#### Univariate Analysis
 To understand the individual behavior of our primary audio metrics, we examined the isolated distributions of specific song characteristics across the dataset.
 
 <iframe src="assets/danceability_distribution.html" width="700" height="600" frameborder="0"></iframe>
@@ -35,7 +35,7 @@ The danceability distribution shows a slightly left-skewed bell curve centered r
 The energy distribution shows a distinct left-skew, revealing that streaming platforms host a high concentration of high-energy tracks. There is a notable spike approaching the 0.8 to 0.9 range, showing that high-intensity music heavily populates modern genres.
 
 
-## Bivariate Analysis
+#### Bivariate Analysis
 To explore how these individual features interact with one another, we analyzed pairs of columns to look for underlying associations and patterns.
 
 <iframe src="assets/danceability_vs_energy.html" width="700" height="600" frameborder="0"></iframe>
@@ -48,7 +48,7 @@ This scatter plot maps the relationship between danceability and energy across t
 This visualization explores how music "valence" (the emotional positivity of a track) varies contextually across different musical genres. The variance in distributions highlights clear shifts in emotional tone, showing that track features act as measurable boundaries separating one genre from another.
 
 
-## Interesting Aggregates
+#### Interesting Aggregates
 By grouping the dataset by genre and looking at aggregate statistics, we can pinpoint exactly which features act as the strongest differentiators between musical styles.
 
 | track_genre   |   danceability |   energy |   valence |   acousticness |
@@ -71,7 +71,7 @@ This aggregate table highlights the structural differences between genres. By ev
 # Assessment of Missingness
 
 
-## NMAR Analysis
+#### NMAR Analysis
 
 I believe that the release_date column contains a strong NMAR (Not Missing At Random) component. While our subsequent permutation tests show that its missingness correlates with observed features like popularity, the underlying data-generating process suggests that the missingness ultimately relies on unobserved values or the missing values themselves.
 
@@ -79,30 +79,30 @@ For instance, many missing release dates occur in underground tracks, independen
 
 To shift this mechanism from NMAR to MAR (Missing At Random), we would want to obtain additional data regarding the distribution chain. Specifically, adding columns for Distribution Type (e.g., major record label vs. independent self-release via aggregators like DistroKid) or Catalog Registration Status would help explain why the metadata is absent, effectively making the missingness explainable by observed variables.
 
-## Missing Dependency
+#### Missing Dependency
 
 To rigorously evaluate what factors influence whether a song's release date is missing, we performed two permutation tests tracking the relationship between the missingness indicator (release_date_missing) and other track characteristics.
 
-## Permutation Test 1: Release Date Missingness vs. Popularity 
+#### Permutation Test 1: Release Date Missingness vs. Popularity 
 - Null Hypothesis (H_0): The distribution of popularity is the same regardless of whether release_date is missing or present.
 - Alternative Hypothesis (H_1): The distribution of popularity is different when release_date is missing compared to when it is present.
 - Test Statistic: The difference in mean popularity between the two groups (Missing Mean - Not Missing Mean).
 - Significance Level: 0.05
   
-## Result and Interpretation:
+#### Result and Interpretation:
 Running this permutation test yielded an empirical p-value of 0.0. Out of all 1,000 shuffled trials, not a single permuted difference came close to our extreme observed difference. Therefore, we reject the null hypothesis at the 5% significance level. We conclude that the missingness of release_date depends on popularity. This confirms that the missingness of this column is MAR conditional on popularity, as less mainstream or obscure tracks are systematically less likely to have complete metadata.
 
 
 <iframe src="missingness_popularity.html" width="700" height="600" frameborder="0"></iframe> 
 
 
-## Permutation Test 2: Release Date Missingness vs. Tempo 
+#### Permutation Test 2: Release Date Missingness vs. Tempo 
 - Null Hypothesis (H_0): The distribution of tempo is the same regardless of whether release_date is missing or present.Alternative
 - Hypothesis (H_1): The distribution of tempo is different when release_date is missing compared to when it is present.
 - Test Statistic: The difference in mean tempo between the two groups.
 - Significance Level: 0.05
   
-## Result and Interpretation:
+#### Result and Interpretation:
 Intuitively, a song's musical speed (Beats Per Minute) should have no structural impact on whether an administrative metadata field is filled out. The permutation test confirmed this intuition, yielding a high p-value (significantly greater than 0.05). Consequently, we fail to reject the null hypothesis. We conclude that the missingness of release_date does not depend on tempo.
 
 <iframe src="permutation_dist_popularity.html" width="700" height="600" frameborder="0"></iframe>
@@ -135,7 +135,7 @@ The data provide strong evidence that the energy levels of Pop and Rock songs ar
 
 ---
 
-## Framing a Prediction Problem
+#### Framing a Prediction Problem
 
 # Problem Identification
 Building upon our exploratory analysis and our hypothesis test regarding musical intensity, we are framing a machine learning task to see how effectively a song's structural audio profile can dictate its classification.
@@ -167,7 +167,7 @@ By strictly restricting our feature set X to raw acoustic signals, we guarantee 
 ---
 
 
-## Baseline Model
+#### Baseline Model
 # Model Description & Feature Types
 To establish a performance floor for our genre prediction task, we trained a baseline Decision Tree Classifier using a single, unified scikit-learn Pipeline. Our model utilizes three features from the original dataset:
 - Quantitative Features (2): energy and loudness. These columns measure continuous, numerical audio characteristics and were left as-is (passed through without scaling) as permitted by the baseline requirements.
@@ -202,7 +202,7 @@ As a result, this baseline model sets a clear threshold that we will attempt to 
 
 ---
 
-## Final Model
+#### Final Model
 # Engineered Features & Data-Generating Process Rationale
 To drastically improve upon our baseline, we introduced three new feature transformations to our pipeline, selecting variables whose underlying data-generating structures match the physical reality of how these musical genres are recorded:
 
@@ -251,7 +251,7 @@ The success of this final model highlights that while a basic model can learn si
 
 ---
 
-## Fairness Analysis
+#### Fairness Analysis
 To guarantee that our final genre classification framework operates equitably across different subgroups of audio tracks, we conducted a formal statistical fairness analysis. Specifically, we examined if the model's predictive capacities display structural bias when handling explicit lyrical content.
 
 # Defining Groups & Evaluation Metric
