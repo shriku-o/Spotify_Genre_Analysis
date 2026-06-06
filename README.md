@@ -94,7 +94,6 @@ Running this permutation test yielded an empirical p-value of 0.0. Out of all 1,
 
 
 <iframe src="missingness_popularity.html" width="800" height="600" frameborder="0"></iframe> 
-^^ CHANGE TO CORRECT GRAPH
 
 
 ## Permutation Test 2: Release Date Missingness vs. Tempo 
