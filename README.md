@@ -175,7 +175,7 @@ To establish a performance floor for our genre prediction task, we trained a bas
 - Ordinal Features (0): No ordinal features were included in this baseline model.
 
 # Categorical Encoding
-Because machine learning algorithms require numerical input matrices, we used a ColumnTransformer to handle our nominal column, explicit. We applied a OneHotEncoder, which automatically expands the boolean true/false values into separate, binary dummy columns ($0$ or $1$) before handing the processed matrix over to the decision tree.
+Because machine learning algorithms require numerical input matrices, we used a ColumnTransformer to handle our nominal column, explicit. We applied a OneHotEncoder, which automatically expands the boolean true/false values into separate, binary dummy columns (0 or 1) before handing the processed matrix over to the decision tree.
 
 # Performance & Evaluation on Unseen Data
 To ensure our model's performance reflects its true ability to generalize to completely unseen music, we held out an isolated 20% validation test set using stratified sampling. Evaluating the model's test predictions against our chosen metric yields the following results:
@@ -194,8 +194,56 @@ Macro F1-Score: 0.5870
 
 # Is This Model "Good"?
 We do not believe that our current baseline model is "good," though it serves its structural purpose as a starting benchmark.
-- Why it's a step in the right direction: With four distinct genres, a purely random guess would result in an accuracy and Macro F1-score of roughly $0.25$ ($25\%$). Our baseline model significantly outperforms random chance, showing that even a basic combination of intensity (energy/loudness) and content flags (explicit) possesses some underlying predictive power.
+- Why it's a step in the right direction: With four distinct genres, a purely random guess would result in an accuracy and Macro F1-score of roughly 0.25 (25\%). Our baseline model significantly outperforms random chance, showing that even a basic combination of intensity (energy/loudness) and content flags (explicit) possesses some underlying predictive power.
 - Why it's ultimately poor: A Macro F1-score in the 0.55 - 0.65 range means the model suffers from substantial classification error. This deficiency occurs because energy and loudness are highly collinear metrics—they essentially capture the same underlying trait (auditory volume/intensity). By limiting our features to just these three columns, the model completely lacks information regarding other vital acoustic dimensions. For example, it cannot look at instrumentalness or acousticness, which are the primary defining factors needed to cleanly separate classical and jazz pieces from mainstream pop and rock tracks.
 
 As a result, this baseline model sets a clear threshold that we will attempt to beat in our Final Model by introducing comprehensive feature engineering and a more robust classifier.
 
+
+---
+
+## Final Model
+# Engineered Features & Data-Generating Process Rationale
+To drastically improve upon our baseline, we introduced three new feature transformations to our pipeline, selecting variables whose underlying data-generating structures match the physical reality of how these musical genres are recorded:
+
+- QuantileTransformer on acousticness: The distribution of acousticness is inherently bimodal. Classical music almost entirely clumps near 1.0, whereas contemporary electronic Pop and compressed Rock tracks clump heavily near 0.0. Standard scaling fails on heavily polarized distributions. By using a uniform quantile mapping, we spread out these distributions, allowing our trees to easily find sharper splitting thresholds between purely acoustic and heavily synthesized audio profiles.
+- Binarizer (threshold=0.5) on instrumentalness: The presence of a prominent human lead vocal is a massive structural divider. Pop and Rock almost strictly rely on lyrical tracks, whereas Classical composition is naturally instrumental. By applying a hard threshold of 0.5, we convert this continuous probability curve into a distinct "Is Vocal Track" boolean, mimicking the definitive human decision of whether a song includes a vocalist.
+- StandardScaler on tempo: Songs are naturally written at various Beats Per Minute (BPM) bands, which can fluctuate over a wide continuous scale (e.g., 60 BPM to 200 BPM). Normalizing this metric via standard scaling centers the variations around 0 and scales the variance, stabilizing node splits and preventing wide metric ranges from causing disparate node weights.
+
+# Modeling Algorithm & Hyperparameter Selection
+We upgraded our classifier from a single, rigid decision tree to a Random Forest Classifier. A single decision tree is notorious for over-fitting and chasing specific noise quirks within a sample training block. Random Forests build an ensemble of hundreds of decorrelated trees using bootstrap aggregating (bagging) and feature randomness, resulting in a collective vote that generalizes far superiorly to unseen data.
+
+To tune this ensemble, we conducted a systematic 5-fold cross-validation grid search (GridSearchCV) across 36 distinct parameter combinations. The settings that achieved the highest cross-validated Macro F1-score and were chosen for our final evaluation are:
+- max_depth: None
+- min_samples_split: 5 
+- n_estimators: 50
+  
+# Performance Comparison: Baseline vs. Final Model
+Evaluating the optimized final model on our strictly identical unseen 20% validation test set yielded an incredible performance surge over the baseline setup:
+- Baseline Model Macro F1-Score: 0.5870
+- Final Model Macro F1-Score:
+- 
+Best Hyperparameters: {'classifier__max_depth': None, 'classifier__min_samples_split': 5, 'classifier__n_estimators': 50}
+Final Model Test Macro F1-Score: 0.7718
+
+| Genre | Precision | Recall | F1-Score | Support |
+| :--- | :---: | :---: | :---: | :---: |
+| **classical** | 0.85 | 0.87 | 0.86 | 121 |
+| **jazz** | 0.68 | 0.70 | 0.69 | 90 |
+| **pop** | 0.73 | 0.75 | 0.74 | 84 |
+| **rock** | 0.84 | 0.75 | 0.80 | 65 |
+| | | | | |
+| **Accuracy** | | | **0.78** | **360** |
+| **Macro Average** | 0.78 | 0.77 | **0.77** | **360** |
+| **Weighted Average** | 0.78 | 0.78 | **0.78** | **360** |
+
+# Performance Breakdown
+Our baseline model was severely limited because it treated musical energy and loudness as a proxy for all genre classification. This caused huge confusion errors, dragging down Pop and Rock F1-scores to 0.53 and 0.47 respectively.
+
+By adding our new acoustic parameters, the Final Model performs beautifully:
+- Classical and Jazz Differentiation: The inclusion of binarize_inst and quantile_acoustic allows the model to map tracks precisely. Classical and instrumental Jazz pieces are no longer mistakenly dumped into the Pop category, leading to massive surges in both Precision and Recall.
+- Pop vs. Rock Splitting: Adding scaled tempo and danceability gave the Random Forest the subtle acoustic parameters required to split energetic tracks. Pop songs (which rely heavily on rhythmic danceability structures) can now be decoupled cleanly from standard guitar-driven Rock compositions.
+
+The success of this final model highlights that while a basic model can learn simple signals like volume, multidimensional tasks like genre classification require a diverse, cleanly engineered acoustic feature space.
+
+<iframe src="final_model_confusion_matrix.html" width="800" height="600" frameborder="0"></iframe>
