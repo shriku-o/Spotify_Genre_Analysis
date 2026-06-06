@@ -180,6 +180,7 @@ Because machine learning algorithms require numerical input matrices, we used a 
 # Performance & Evaluation on Unseen Data
 To ensure our model's performance reflects its true ability to generalize to completely unseen music, we held out an isolated 20% validation test set using stratified sampling. Evaluating the model's test predictions against our chosen metric yields the following results:
 
+Macro F1-Score: 0.5870
 | Genre | Precision | Recall | F1-Score | Support |
 | :--- | :---: | :---: | :---: | :---: |
 | **classical** | 0.80 | 0.72 | 0.76 | 121 |
