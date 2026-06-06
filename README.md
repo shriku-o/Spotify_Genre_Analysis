@@ -133,4 +133,34 @@ Because our calculated p-value is less than our significance level of 0.05, we r
 The data provide strong evidence that the energy levels of Pop and Rock songs are systematically different. The permutation test demonstrates that the lower average energy score observed in Pop relative to Rock is highly unlikely to be the result of random sampling luck. While these results strongly support a structural distinction between the genres, we cannot conclude with 100% absolute certainty that this represents an unyielding rule of musicology. Because our dataset consists of a fixed snapshot of Spotify's catalog rather than a randomized controlled trial, these statistical findings suggest a meaningful correlation in how these genres are engineered and classified, rather than an absolute truth.
 
 
+---
+
+## Framing a Prediction Problem
+
+# Problem Identification
+Building upon our exploratory analysis and our hypothesis test regarding musical intensity, we are framing a machine learning task to see how effectively a song's structural audio profile can dictate its classification.
+
+Our problem is a multiclass classification problem. Specifically, given an unlabelled track, our model will predict which of four major genres it belongs to: Pop, Rock, Jazz, or Classical.
+- Response Variable: The response variable is track_genre. We chose this variable because it directly addresses our central project question: “Which audio features best separate one genre from another?” By training a classifier and analyzing its performance, we can see if these subjective genres are algorithmically distinct in a multi-dimensional feature space.
+
+# Evaluation Metric
+To evaluate our model, we will use the Macro F1-score rather than standard classification accuracy.
+
+While the Spotify dataset initially contains an equal number of rows per genre, our data cleaning process in Step 2 dropped duplicate tracks based on track_id (since many songs are cross-listed across multiple genres). This duplicate removal introduces a class imbalance, meaning some genres now have fewer representative tracks than others.
+
+If we used standard accuracy, a model could achieve a deceptively high score by simply guessing the most dominant remaining genre. The Macro F1-score computes the F1-score (the harmonic mean of precision and recall) for each genre independently and takes their unweighted average. This ensures that the model is penalized heavily if it struggles to differentiate a specific, difficult genre (like Pop vs. Rock), treating the prediction quality of all four genres with equal importance.
+
+# Justification of "Time of Prediction"
+To ensure our model operates realistically, we must simulate the exact moment a prediction would occur in production. Imagine an independent artist uploading a brand-new, unreleased track to Spotify, and the platform needing to automatically tag its genre.
+
+At this time of prediction, we have access to the digital audio file itself. Therefore, Spotify's automated digital signal processing tools can instantaneously extract raw acoustic features, which means we can safely use the following columns as features:
+- danceability, energy, loudness, speechiness, acousticness, instrumentalness, liveness, valence, and tempo.
+
+
+Conversely, there are several columns in our dataset that we cannot use because they represent post-release metrics or administrative metadata:
+- popularity: A song's popularity score is calculated based on total stream counts, repeat plays, and user skip rates over time. At the moment a song is newly uploaded, its stream count is zero. Including popularity would cause severe data leakage, as the model would mistakenly learn to associate low or high popularity distributions with specific genres based on historical data rather than the music itself.
+- track_id / album_name: These are administrative strings generated after a track is cataloged and offer no musical predictive power.
+
+By strictly restricting our feature set X to raw acoustic signals, we guarantee that our classifier learns to identify genres based entirely on their sonic footprint.
+
 
