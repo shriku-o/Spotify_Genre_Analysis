@@ -114,14 +114,14 @@ Intuitively, a song's musical speed (Beats Per Minute) should have no structural
 # Hypothesis Testing
 
 To evaluate whether genres are truly separated by quantifiable audio characteristics, we performed a statistical hypothesis test analyzing the energy feature between two major contemporary genres: Pop and Rock.
-# Stating the Hypotheses
+#### Stating the Hypotheses
 - Null Hypothesis (H_0): In the underlying population of music, the true mean energy of Pop tracks is equal to the true mean energy of Rock tracks. Any observed difference in our sample is entirely due to random sampling variation.
 - Alternative Hypothesis (H_1): The true mean energy of Pop tracks is different from the true mean energy of Rock tracks. (Two-tailed test).
 - Significance Level: We select 0.05 as our threshold for statistical significance.
-# Justification of Choices
+#### Justification of Choices
 - Choice of Test: We chose a Permutation Test rather than a traditional parametric two-sample t-test. Spotify's audio features (like energy) are algorithmically engineered metrics bounded strictly between 0 and 1. Because their distributions can be highly skewed or multi-modal, a permutation test is an ideal non-parametric approach. It does not assume mathematical normality, relying instead on the empirical distribution of our actual data.
 - Choice of Test Statistic: The difference in sample means (Mean_pop) - (Mean_rock) is an intuitive and mathematically sound test statistic. It directly answers our question by quantifying the average distance in intensity between the two groups.
-# Results and Test Interpretation:
+#### Results and Test Interpretation:
 After running 1,000 permutations where genre labels were randomly shuffled across tracks, we observed the following outcomes:
 - Observed Difference:
 <iframe src="hypothesis_test_energy.html" width="700" height="600" frameborder="0"></iframe>
@@ -129,28 +129,28 @@ After running 1,000 permutations where genre labels were randomly shuffled acros
 
 Because our calculated p-value is less than our significance level of 0.05, we reject the null hypothesis.
 
-# Statistical Conclusion
+#### Statistical Conclusion
 The data provide strong evidence that the energy levels of Pop and Rock songs are systematically different. The permutation test demonstrates that the lower average energy score observed in Pop relative to Rock is highly unlikely to be the result of random sampling luck. While these results strongly support a structural distinction between the genres, we cannot conclude with 100% absolute certainty that this represents an unyielding rule of musicology. Because our dataset consists of a fixed snapshot of Spotify's catalog rather than a randomized controlled trial, these statistical findings suggest a meaningful correlation in how these genres are engineered and classified, rather than an absolute truth.
 
 
 ---
 
-#### Framing a Prediction Problem
+# Framing a Prediction Problem
 
-# Problem Identification
+#### Problem Identification
 Building upon our exploratory analysis and our hypothesis test regarding musical intensity, we are framing a machine learning task to see how effectively a song's structural audio profile can dictate its classification.
 
 Our problem is a multiclass classification problem. Specifically, given an unlabelled track, our model will predict which of four major genres it belongs to: Pop, Rock, Jazz, or Classical.
 - Response Variable: The response variable is track_genre. We chose this variable because it directly addresses our central project question: “Which audio features best separate one genre from another?” By training a classifier and analyzing its performance, we can see if these subjective genres are algorithmically distinct in a multi-dimensional feature space.
 
-# Evaluation Metric
+#### Evaluation Metric
 To evaluate our model, we will use the Macro F1-score rather than standard classification accuracy.
 
 While the Spotify dataset initially contains an equal number of rows per genre, our data cleaning process in Step 2 dropped duplicate tracks based on track_id (since many songs are cross-listed across multiple genres). This duplicate removal introduces a class imbalance, meaning some genres now have fewer representative tracks than others.
 
 If we used standard accuracy, a model could achieve a deceptively high score by simply guessing the most dominant remaining genre. The Macro F1-score computes the F1-score (the harmonic mean of precision and recall) for each genre independently and takes their unweighted average. This ensures that the model is penalized heavily if it struggles to differentiate a specific, difficult genre (like Pop vs. Rock), treating the prediction quality of all four genres with equal importance.
 
-# Justification of "Time of Prediction"
+#### Justification of "Time of Prediction"
 To ensure our model operates realistically, we must simulate the exact moment a prediction would occur in production. Imagine an independent artist uploading a brand-new, unreleased track to Spotify, and the platform needing to automatically tag its genre.
 
 At this time of prediction, we have access to the digital audio file itself. Therefore, Spotify's automated digital signal processing tools can instantaneously extract raw acoustic features, which means we can safely use the following columns as features:
@@ -167,17 +167,17 @@ By strictly restricting our feature set X to raw acoustic signals, we guarantee 
 ---
 
 
-#### Baseline Model
-# Model Description & Feature Types
+# Baseline Model
+#### Model Description & Feature Types
 To establish a performance floor for our genre prediction task, we trained a baseline Decision Tree Classifier using a single, unified scikit-learn Pipeline. Our model utilizes three features from the original dataset:
 - Quantitative Features (2): energy and loudness. These columns measure continuous, numerical audio characteristics and were left as-is (passed through without scaling) as permitted by the baseline requirements.
 - Nominal Categorical Features (1): explicit. This is a boolean indicator representing whether a song contains explicit content.
 - Ordinal Features (0): No ordinal features were included in this baseline model.
 
-# Categorical Encoding
+#### Categorical Encoding
 Because machine learning algorithms require numerical input matrices, we used a ColumnTransformer to handle our nominal column, explicit. We applied a OneHotEncoder, which automatically expands the boolean true/false values into separate, binary dummy columns (0 or 1) before handing the processed matrix over to the decision tree.
 
-# Performance & Evaluation on Unseen Data
+#### Performance & Evaluation on Unseen Data
 To ensure our model's performance reflects its true ability to generalize to completely unseen music, we held out an isolated 20% validation test set using stratified sampling. Evaluating the model's test predictions against our chosen metric yields the following results:
 
 Macro F1-Score: 0.5870
@@ -192,7 +192,7 @@ Macro F1-Score: 0.5870
 | **Macro Average** | 0.60 | 0.58 | **0.59** | **360** |
 | **Weighted Average** | 0.63 | 0.61 | **0.61** | **360** |
 
-# Is This Model "Good"?
+#### Is This Model "Good"?
 We do not believe that our current baseline model is "good," though it serves its structural purpose as a starting benchmark.
 - Why it's a step in the right direction: With four distinct genres, a purely random guess would result in an accuracy and Macro F1-score of roughly 0.25 (25\%). Our baseline model significantly outperforms random chance, showing that even a basic combination of intensity (energy/loudness) and content flags (explicit) possesses some underlying predictive power.
 - Why it's ultimately poor: A Macro F1-score in the 0.55 - 0.65 range means the model suffers from substantial classification error. This deficiency occurs because energy and loudness are highly collinear metrics—they essentially capture the same underlying trait (auditory volume/intensity). By limiting our features to just these three columns, the model completely lacks information regarding other vital acoustic dimensions. For example, it cannot look at instrumentalness or acousticness, which are the primary defining factors needed to cleanly separate classical and jazz pieces from mainstream pop and rock tracks.
@@ -202,15 +202,15 @@ As a result, this baseline model sets a clear threshold that we will attempt to 
 
 ---
 
-#### Final Model
-# Engineered Features & Data-Generating Process Rationale
+# Final Model
+#### Engineered Features & Data-Generating Process Rationale
 To drastically improve upon our baseline, we introduced three new feature transformations to our pipeline, selecting variables whose underlying data-generating structures match the physical reality of how these musical genres are recorded:
 
 - QuantileTransformer on acousticness: The distribution of acousticness is inherently bimodal. Classical music almost entirely clumps near 1.0, whereas contemporary electronic Pop and compressed Rock tracks clump heavily near 0.0. Standard scaling fails on heavily polarized distributions. By using a uniform quantile mapping, we spread out these distributions, allowing our trees to easily find sharper splitting thresholds between purely acoustic and heavily synthesized audio profiles.
 - Binarizer (threshold=0.5) on instrumentalness: The presence of a prominent human lead vocal is a massive structural divider. Pop and Rock almost strictly rely on lyrical tracks, whereas Classical composition is naturally instrumental. By applying a hard threshold of 0.5, we convert this continuous probability curve into a distinct "Is Vocal Track" boolean, mimicking the definitive human decision of whether a song includes a vocalist.
 - StandardScaler on tempo: Songs are naturally written at various Beats Per Minute (BPM) bands, which can fluctuate over a wide continuous scale (e.g., 60 BPM to 200 BPM). Normalizing this metric via standard scaling centers the variations around 0 and scales the variance, stabilizing node splits and preventing wide metric ranges from causing disparate node weights.
 
-# Modeling Algorithm & Hyperparameter Selection
+#### Modeling Algorithm & Hyperparameter Selection
 We upgraded our classifier from a single, rigid decision tree to a Random Forest Classifier. A single decision tree is notorious for over-fitting and chasing specific noise quirks within a sample training block. Random Forests build an ensemble of hundreds of decorrelated trees using bootstrap aggregating (bagging) and feature randomness, resulting in a collective vote that generalizes far superiorly to unseen data.
 
 To tune this ensemble, we conducted a systematic 5-fold cross-validation grid search (GridSearchCV) across 36 distinct parameter combinations. The settings that achieved the highest cross-validated Macro F1-score and were chosen for our final evaluation are:
@@ -218,7 +218,7 @@ To tune this ensemble, we conducted a systematic 5-fold cross-validation grid se
 - min_samples_split: 5 
 - n_estimators: 50
   
-# Performance Comparison: Baseline vs. Final Model
+#### Performance Comparison: Baseline vs. Final Model
 Evaluating the optimized final model on our strictly identical unseen 20% validation test set yielded an incredible performance surge over the baseline setup:
 - Baseline Model Macro F1-Score: 0.5870
 - Final Model Macro F1-Score:
@@ -237,7 +237,7 @@ Final Model Test Macro F1-Score: 0.7718
 | **Macro Average** | 0.78 | 0.77 | **0.77** | **360** |
 | **Weighted Average** | 0.78 | 0.78 | **0.78** | **360** |
 
-# Performance Breakdown
+#### Performance Breakdown
 Our baseline model was severely limited because it treated musical energy and loudness as a proxy for all genre classification. This caused huge confusion errors, dragging down Pop and Rock F1-scores to 0.53 and 0.47 respectively.
 
 By adding our new acoustic parameters, the Final Model performs beautifully:
@@ -251,21 +251,21 @@ The success of this final model highlights that while a basic model can learn si
 
 ---
 
-#### Fairness Analysis
+# Fairness Analysis
 To guarantee that our final genre classification framework operates equitably across different subgroups of audio tracks, we conducted a formal statistical fairness analysis. Specifically, we examined if the model's predictive capacities display structural bias when handling explicit lyrical content.
 
-# Defining Groups & Evaluation Metric
+#### Defining Groups & Evaluation Metric
 - Group X (Explicit Tracks): Tracks that are explicitly flagged by content distribution algorithms (explicit == True).
 - Group Y (Non-Explicit Tracks): Standard tracks containing clean or non-explicit arrangements (explicit == False).
 - Evaluation Metric: Macro F1-Score. We rely on the Macro F1-Score because the class imbalance within our dropped-duplicate test set persists inside individual sub-slices of data. Measuring the average of each genre's harmonic mean ensures that we capture fairness issues across all four core genres uniformly.
 
-# Hypotheses Formulation
+#### Hypotheses Formulation
 - Null Hypothesis (H_0): Our model is fair. The difference in Macro F1-scores between explicit and non-explicit songs is zero in the population, and any variations observed in our validation testing phase are entirely a result of random sample shuffling variation.
 - Alternative Hypothesis (H_1): Our model is unfair. The predictive capability (Macro F1-score) structurally deviates between explicit tracks and non-explicit tracks, indicating a lack of predictive parity across baseline content types.
 - Test Statistic: The absolute difference in Macro F1-scores between groups: (F1_explicit) - (F1_clean)
 - Significance Level: 0.05
 
-# Results and Test Interpretation
+#### Results and Test Interpretation
 After holding our final fitted Random Forest architecture completely fixed and permuting the group assignments 1,000 times, we obtained the following outputs from our test script:
 
 - Observed Metric Difference: 0.1338
@@ -273,7 +273,7 @@ After holding our final fitted Random Forest architecture completely fixed and p
 
 Our observed metric difference shows that the model actually scored roughly 0.1338 points higher on explicit tracks than clean tracks within our test sample. However, our permutation test yielded a high p-value of 0.4190. Because this p-value is significantly greater than our significance level of 0.05, we fail to reject the null hypothesis.
 
-# Statistical Conclusion
+#### Statistical Conclusion
 The data does not provide sufficient statistical evidence to conclude that our model performs differently for explicit tracks compared to non-explicit tracks. A p-value of 0.4190 means that roughly 42% of the random shuffles produced a metric difference at least as extreme as our observed difference purely by chance.
 
 From the perspective of our data-generating process, this outcome aligns with musical logic. While explicit flags alter metadata tracking and filter out explicit wording, they do not inherently warp or rewrite the primary sonic parameters—such as overall tempo, continuous loudness, structural instrumentalness, or raw algorithmic energy—that define a genre's acoustic blueprint. Pop music structures remain rhythmically distinct and classical recordings remain strictly non-vocal and acoustic, regardless of categorical tags.
