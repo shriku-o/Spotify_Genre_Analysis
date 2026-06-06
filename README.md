@@ -106,3 +106,30 @@ Running this permutation test yielded an empirical p-value of 0.0. Out of all 1,
 Intuitively, a song's musical speed (Beats Per Minute) should have no structural impact on whether an administrative metadata field is filled out. The permutation test confirmed this intuition, yielding a high p-value (significantly greater than 0.05). Consequently, we fail to reject the null hypothesis. We conclude that the missingness of release_date does not depend on tempo.
 
 <iframe src="permutation_dist_popularity.html" width="800" height="600" frameborder="0"></iframe>
+
+
+---
+
+
+# Hypothesis Testing
+
+To evaluate whether genres are truly separated by quantifiable audio characteristics, we performed a statistical hypothesis test analyzing the energy feature between two major contemporary genres: Pop and Rock.
+# Stating the Hypotheses
+- Null Hypothesis ($H_0$): In the underlying population of music, the true mean energy of Pop tracks is equal to the true mean energy of Rock tracks. Any observed difference in our sample is entirely due to random sampling variation.
+- Alternative Hypothesis ($H_1$): The true mean energy of Pop tracks is different from the true mean energy of Rock tracks. (Two-tailed test).
+- Significance Level ($\alpha$): We select $\alpha = 0.05$ as our threshold for statistical significance.
+# Justification of Choices
+- Choice of Test: We chose a Permutation Test rather than a traditional parametric two-sample t-test. Spotify's audio features (like energy) are algorithmically engineered metrics bounded strictly between 0 and 1. Because their distributions can be highly skewed or multi-modal, a permutation test is an ideal non-parametric approach. It does not assume mathematical normality, relying instead on the empirical distribution of our actual data.
+- Choice of Test Statistic: The difference in sample means ($\text{Mean}_{\text{pop}} - \text{Mean}_{\text{rock}}$) is an intuitive and mathematically sound test statistic. It directly answers our question by quantifying the average distance in intensity between the two groups.
+# Results and Test Interpretation:
+After running 1,000 permutations where genre labels were randomly shuffled across tracks, we observed the following outcomes:
+- Observed Difference: <iframe src="hypothesis_test_energy.html" width="800" height="600" frameborder="0"></iframe>
+- Resulting p-value: $0.0$
+
+Because our calculated p-value is less than our significance level of $\alpha = 0.05$, we reject the null hypothesis.
+
+# Statistical Conclusion
+The data provide strong evidence that the energy levels of Pop and Rock songs are systematically different. The permutation test demonstrates that the lower average energy score observed in Pop relative to Rock is highly unlikely to be the result of random sampling luck. While these results strongly support a structural distinction between the genres, we cannot conclude with 100% absolute certainty that this represents an unyielding rule of musicology. Because our dataset consists of a fixed snapshot of Spotify's catalog rather than a randomized controlled trial, these statistical findings suggest a meaningful correlation in how these genres are engineered and classified, rather than an absolute truth.
+
+
+
