@@ -180,19 +180,16 @@ Because machine learning algorithms require numerical input matrices, we used a 
 # Performance & Evaluation on Unseen Data
 To ensure our model's performance reflects its true ability to generalize to completely unseen music, we held out an isolated 20% validation test set using stratified sampling. Evaluating the model's test predictions against our chosen metric yields the following results:
 
-Baseline Model Test Macro F1-Score: Baseline Model Test Macro F1-Score: 0.5870
-Detailed Classification Report:
-              precision    recall  f1-score   support
-
-   classical       0.80      0.72      0.76       121
-        jazz       0.60      0.59      0.60        90
-         pop       0.45      0.63      0.53        84
-        rock       0.57      0.40      0.47        65
-
-    accuracy                           0.61       360
-   macro avg       0.60      0.58      0.59       360
-weighted avg       0.63      0.61      0.61       360
-
+| Genre | Precision | Recall | F1-Score | Support |
+| :--- | :---: | :---: | :---: | :---: |
+| **classical** | 0.80 | 0.72 | 0.76 | 121 |
+| **jazz** | 0.60 | 0.59 | 0.60 | 90 |
+| **pop** | 0.45 | 0.63 | 0.53 | 84 |
+| **rock** | 0.57 | 0.40 | 0.47 | 65 |
+| | | | | |
+| **Accuracy** | | | **0.61** | **360** |
+| **Macro Average** | 0.60 | 0.58 | **0.59** | **360** |
+| **Weighted Average** | 0.63 | 0.61 | **0.61** | **360** |
 
 # Is This Model "Good"?
 We do not believe that our current baseline model is "good," though it serves its structural purpose as a starting benchmark.
