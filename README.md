@@ -247,3 +247,39 @@ By adding our new acoustic parameters, the Final Model performs beautifully:
 The success of this final model highlights that while a basic model can learn simple signals like volume, multidimensional tasks like genre classification require a diverse, cleanly engineered acoustic feature space.
 
 <iframe src="final_model_confusion_matrix.html" width="800" height="600" frameborder="0"></iframe>
+
+
+---
+
+## Fairness Analysis
+To guarantee that our final genre classification framework operates equitably across different subgroups of audio tracks, we conducted a formal statistical fairness analysis. Specifically, we examined if the model's predictive capacities display structural bias when handling explicit lyrical content.
+
+# Defining Groups & Evaluation Metric
+- Group X (Explicit Tracks): Tracks that are explicitly flagged by content distribution algorithms (explicit == True).
+- Group Y (Non-Explicit Tracks): Standard tracks containing clean or non-explicit arrangements (explicit == False).
+- Evaluation Metric: Macro F1-Score. We rely on the Macro F1-Score because the class imbalance within our dropped-duplicate test set persists inside individual sub-slices of data. Measuring the average of each genre's harmonic mean ensures that we capture fairness issues across all four core genres uniformly.
+
+# Hypotheses Formulation
+- Null Hypothesis (H_0): Our model is fair. The difference in Macro F1-scores between explicit and non-explicit songs is zero in the population, and any variations observed in our validation testing phase are entirely a result of random sample shuffling variation.
+- Alternative Hypothesis (H_1): Our model is unfair. The predictive capability (Macro F1-score) structurally deviates between explicit tracks and non-explicit tracks, indicating a lack of predictive parity across baseline content types.
+- Test Statistic: The absolute difference in Macro F1-scores between groups: (F1_explicit) - (F1_clean)
+- Significance Level: 0.05
+
+# Results and Test Interpretation
+After holding our final fitted Random Forest architecture completely fixed and permuting the group assignments 1,000 times, we obtained the following outputs from our test script:
+
+- Observed Metric Difference: 0.1338
+- Resulting p-value: 0.4190
+
+Our observed metric difference shows that the model actually scored roughly 0.1338 points higher on explicit tracks than clean tracks within our test sample. However, our permutation test yielded a high p-value of 0.4190. Because this p-value is significantly greater than our significance level of 0.05, we fail to reject the null hypothesis.
+
+# Statistical Conclusion
+The data does not provide sufficient statistical evidence to conclude that our model performs differently for explicit tracks compared to non-explicit tracks. A p-value of 0.4190 means that roughly 42% of the random shuffles produced a metric difference at least as extreme as our observed difference purely by chance.
+
+From the perspective of our data-generating process, this outcome aligns with musical logic. While explicit flags alter metadata tracking and filter out explicit wording, they do not inherently warp or rewrite the primary sonic parameters—such as overall tempo, continuous loudness, structural instrumentalness, or raw algorithmic energy—that define a genre's acoustic blueprint. Pop music structures remain rhythmically distinct and classical recordings remain strictly non-vocal and acoustic, regardless of categorical tags.
+
+While these results indicate an acceptable level of predictive parity between explicit and clean tracks, we cannot state with absolute certainty that the model is perfectly fair under all conditions. Because this analysis is constrained to our specific validation slice of Spotify data, these findings simply mean we cannot prove a systematic, unfair performance bias across these groups given our current evidence.
+
+<iframe src="fairness_analysis_distribution.html" width="800" height="600" frameborder="0"></iframe>
+
+
