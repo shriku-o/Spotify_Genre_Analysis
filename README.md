@@ -164,3 +164,40 @@ Conversely, there are several columns in our dataset that we cannot use because 
 By strictly restricting our feature set X to raw acoustic signals, we guarantee that our classifier learns to identify genres based entirely on their sonic footprint.
 
 
+---
+
+
+## Baseline Model
+# Model Description & Feature Types
+To establish a performance floor for our genre prediction task, we trained a baseline Decision Tree Classifier using a single, unified scikit-learn Pipeline. Our model utilizes three features from the original dataset:
+- Quantitative Features (2): energy and loudness. These columns measure continuous, numerical audio characteristics and were left as-is (passed through without scaling) as permitted by the baseline requirements.
+- Nominal Categorical Features (1): explicit. This is a boolean indicator representing whether a song contains explicit content.
+- Ordinal Features (0): No ordinal features were included in this baseline model.
+
+# Categorical Encoding
+Because machine learning algorithms require numerical input matrices, we used a ColumnTransformer to handle our nominal column, explicit. We applied a OneHotEncoder, which automatically expands the boolean true/false values into separate, binary dummy columns ($0$ or $1$) before handing the processed matrix over to the decision tree.
+
+# Performance & Evaluation on Unseen Data
+To ensure our model's performance reflects its true ability to generalize to completely unseen music, we held out an isolated 20% validation test set using stratified sampling. Evaluating the model's test predictions against our chosen metric yields the following results:
+
+Baseline Model Test Macro F1-Score: Baseline Model Test Macro F1-Score: 0.5870
+Detailed Classification Report:
+              precision    recall  f1-score   support
+
+   classical       0.80      0.72      0.76       121
+        jazz       0.60      0.59      0.60        90
+         pop       0.45      0.63      0.53        84
+        rock       0.57      0.40      0.47        65
+
+    accuracy                           0.61       360
+   macro avg       0.60      0.58      0.59       360
+weighted avg       0.63      0.61      0.61       360
+
+
+# Is This Model "Good"?
+We do not believe that our current baseline model is "good," though it serves its structural purpose as a starting benchmark.
+- Why it's a step in the right direction: With four distinct genres, a purely random guess would result in an accuracy and Macro F1-score of roughly $0.25$ ($25\%$). Our baseline model significantly outperforms random chance, showing that even a basic combination of intensity (energy/loudness) and content flags (explicit) possesses some underlying predictive power.
+- Why it's ultimately poor: A Macro F1-score in the 0.55 - 0.65 range means the model suffers from substantial classification error. This deficiency occurs because energy and loudness are highly collinear metrics—they essentially capture the same underlying trait (auditory volume/intensity). By limiting our features to just these three columns, the model completely lacks information regarding other vital acoustic dimensions. For example, it cannot look at instrumentalness or acousticness, which are the primary defining factors needed to cleanly separate classical and jazz pieces from mainstream pop and rock tracks.
+
+As a result, this baseline model sets a clear threshold that we will attempt to beat in our Final Model by introducing comprehensive feature engineering and a more robust classifier.
+
