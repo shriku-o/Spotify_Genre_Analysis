@@ -1,4 +1,4 @@
-# Introduction
+# Introduction: The friend who listens to everything
 
 Given my personal love for music, I was interested in exploring what kind of data music streaming services like Spotify and Apple Music use to determine a user's recommendations. As someone who listens to a wide range of music, I was curious how the algorithm would look at and differentiate between the music types.
 
